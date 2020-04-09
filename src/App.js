@@ -29,18 +29,6 @@ export default function App() {
     }));
   }
 
-  function renderTechs(techs) {
-    const arraylength = techs.length;
-    const tech = [];
-
-    for (let i = 0; i < arraylength; i++) {
-      tech.push(
-        <Text style={styles.tech} key={i}>{techs[i]}</Text>
-      )
-    }
-    return tech
-  }
-
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor="#7159c1" />
@@ -52,7 +40,9 @@ export default function App() {
             <View style={styles.repositoryContainer}>
               <Text style={styles.repository}>{repository.title}</Text>
               <View style={styles.techsContainer}>
-                {renderTechs(repository.techs)}
+                {repository.techs.map(tech => (
+                  <Text style={styles.techs} key={Math.random(1, 100)}>{tech}</Text>
+                ))}
               </View>
               <View style={styles.likesContainer}>
                 <Text
