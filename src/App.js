@@ -22,11 +22,17 @@ export default function App() {
   }, []);
 
   async function handleLikeRepository(id) {
-    await api.post(`repositories/${id}/like`)
-    .then(api.get('repositories')
-    .then(response => {
-      setRepo(response.data)
-    }));
+    const response = await api.post(`repositories/${id}/like`);
+    const likedRepo = response.data;
+    
+    const repoUpdated = repositories.map(repository => {
+      if (repository.id === id) {
+        return likedRepo;
+      } else {
+        return repository;
+      }
+    });
+    setRepo(repoUpdated);
   }
 
   return (
@@ -41,21 +47,21 @@ export default function App() {
               <Text style={styles.repository}>{repository.title}</Text>
               <View style={styles.techsContainer}>
                 {repository.techs.map(tech => (
-                  <Text style={styles.tech} key={Math.random(1, 100)}>{tech}</Text>
+                  <Text style={styles.tech} key={tech}>{tech}</Text>
                 ))}
               </View>
               <View style={styles.likesContainer}>
                 <Text
                   style={styles.likeText}
-                  testID={`repository-likes-1`}
+                  testID={`repository-likes-${repository.id}`}
                 >
-                  {repository.likes}
+                  {repository.likes} curtida{repository.likes > 1 ? 's' : ''}
                 </Text>
               </View> 
               <TouchableOpacity
                 style={styles.button}
                 onPress={() => handleLikeRepository(repository.id)}
-                testID={`like-button-1`}
+                testID={`like-button-${repository.id}`}
               >
                 <Text style={styles.buttonText}>Curtir</Text>
               </TouchableOpacity>
